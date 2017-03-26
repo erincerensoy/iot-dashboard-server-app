@@ -21,12 +21,14 @@ export class AppComponent implements OnInit {
     globalVars.socket = io({ message:"BEGIN_CONNECTION" });
 
     globalVars.socket.on("sendMessage", (message) => {  
-           console.log('sendMessage', message.deviceId);
-           if(!message || !message.guid || !message.temperature){
+           console.log("received message:", message);
+           
+           if(!message || !message.deviceId || !message.temperature){
+              console.log("message format is invalid!");
               return;
            }
 
-           this.deviceId        = message.deviceId;
+           this.deviceId    = message.deviceId;
            this.temperature = message.temperature;
     });
   }

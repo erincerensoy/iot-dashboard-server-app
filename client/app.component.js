@@ -18,8 +18,9 @@ var AppComponent = (function () {
         var _this = this;
         globalVars.socket = io({ message: "BEGIN_CONNECTION" });
         globalVars.socket.on("sendMessage", function (message) {
-            console.log('sendMessage', message.deviceId);
-            if (!message || !message.guid || !message.temperature) {
+            console.log("received message:", message);
+            if (!message || !message.deviceId || !message.temperature) {
+                console.log("message format is invalid!");
                 return;
             }
             _this.deviceId = message.deviceId;
