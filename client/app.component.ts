@@ -5,15 +5,15 @@ import "/socket.io/socket.io.js";
 
 @Component({
   selector: 'iot-app',
-  template: `<h1>Hello {{name}}, Device Id: {{guid}}</h1>`,
+  template: `<h1>Device Id: {{guid}}, Temperature {{temperature}}</h1>`,
 })
 
 export class AppComponent implements OnInit {
-  name: string; 
+  temperature: string; 
   guid: string;
   
   constructor(){
-    this.name = "iot";
+    this.temperature = "-";
     this.guid = "-";
   }
   
@@ -22,11 +22,12 @@ export class AppComponent implements OnInit {
 
     globalVars.socket.on("sendMessage", (message) => {  
            console.log('sendMessage', message.deviceId);
-           if(!message || !message.deviceId){
+           if(!message || !message.guid || !message.temperature){
               return;
            }
 
-           this.guid = message.deviceId;
+           this.guid        = message.guid;
+           this.temperature = message.temperature;
     });
   }
 }
