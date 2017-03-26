@@ -5,16 +5,16 @@ import "/socket.io/socket.io.js";
 
 @Component({
   selector: 'iot-app',
-  template: `<h1>Device Id: {{guid}}, Temperature {{temperature}}</h1>`,
+  template: `<h1>Device Id: {{deviceId}}, Temperature {{temperature}}</h1>`,
 })
 
 export class AppComponent implements OnInit {
   temperature: string; 
-  guid: string;
+  deviceId: string;
   
   constructor(){
     this.temperature = "-";
-    this.guid = "-";
+    this.deviceId = "-";
   }
   
   ngOnInit() { 
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
               return;
            }
 
-           this.guid        = message.guid;
+           this.deviceId        = message.deviceId;
            this.temperature = message.temperature;
     });
   }
