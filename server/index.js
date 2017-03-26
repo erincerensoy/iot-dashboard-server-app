@@ -1,41 +1,61 @@
 "use strict";
+
 let express = require("express");
-var path = require('path');
-let chat_app = require('express')();
-let http = require('http').Server(chat_app);
+let path = require('path');
+let iot_app = require('express')();
+let http = require('http').Server(iot_app);
 let io = require('socket.io')(http);
-var bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
+let MongoClient = require('mongodb').MongoClient;
 
-let clientListNames = [];
-let dashboard_messages = ["hello iot"];
+let iot_db;
 
-chat_app.use(express.static(__dirname, '/'));
-chat_app.use(express.static(__dirname, '/server/'));
-chat_app.use(express.static(__dirname + "/..", '/client/'));
-chat_app.use(express.static(__dirname + '/node_modules'));
+iot_app.use(express.static(__dirname, '/'));
+iot_app.use(express.static(__dirname, '/server/'));
+iot_app.use(express.static(__dirname + "/..", '/client/'));
+iot_app.use(express.static(__dirname + '/node_modules'));
 
-chat_app.use(bodyParser.json()); // for parsing application/json
-chat_app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+iot_app.use(bodyParser.json()); // for parsing application/json
+iot_app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-chat_app.get('/', function(req, res){
+// Connect to the db
+MongoClient.connect("mongodb://52.41.41.92:27017/messagesDb", function(err, db) {
+  if(!err) {
+    console.log("Connection to messagesDb successful.");
+	iot_db = db;
+  }
+});
+
+iot_app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-chat_app.post('/messages', function(req, res){
+iot_app.post('/messages', function(req, res){
 	let message = req.body;
 	
-	console.log('delivering message to clients... message:', message);
-	dashboard_messages.push(message)
-	io.emit('sendMessage', message)
+	broadcastMessageToClients(message);
+	persistMessage(message);
 
+	//Send Response
+	console.log("returning response...");
 	res.json(req.body);
 });
+
+let persistMessage = (message) => {
+	console.log('persisting message:', message);
+	iot_db.collection('messages').insert(message);
+}
+
+let broadcastMessageToClients = (message) => {
+	console.log('delivering message to clients... message:', message);
+	io.emit('sendMessage', message);
+};
 
 io.on('connection', function(socket){
 	console.log('client connection started.');
 	
 	socket.on('disconnect', function(){
-		
+		console.log('client socket disconnected.');
   	});
 });
 
