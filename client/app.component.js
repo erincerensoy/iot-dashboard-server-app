@@ -11,7 +11,7 @@ var globalVars = require("./service/global");
 require("/socket.io/socket.io.js");
 var AppComponent = (function () {
     function AppComponent() {
-        this.name = "iot";
+        this.temperature = "-";
         this.guid = "-";
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -19,16 +19,17 @@ var AppComponent = (function () {
         globalVars.socket = io({ message: "BEGIN_CONNECTION" });
         globalVars.socket.on("sendMessage", function (message) {
             console.log('sendMessage', message.deviceId);
-            if (!message || !message.deviceId) {
+            if (!message || !message.guid || !message.temperature) {
                 return;
             }
-            _this.guid = message.deviceId;
+            _this.guid = message.guid;
+            _this.temperature = message.temperature;
         });
     };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'iot-app',
-            template: "<h1>Hello {{name}}, Device Id: {{guid}}</h1>"
+            template: "<h1>Device Id: {{guid}}, Temperature {{temperature}}</h1>"
         })
     ], AppComponent);
     return AppComponent;
