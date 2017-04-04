@@ -1,0 +1,93 @@
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><button type="button" class="btn btn-default" aria-label="Left Align">
+                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"> Sign-Up</span>
+                    </button>
+                    </li>
+                     <li>.
+                    </li>
+                    <li><button type="button" class="btn btn-default" aria-label="Left Align">
+                     <span class="glyphicon glyphicon-user" aria-hidden="true"> Sign-In</span>
+                    </button>
+                    </li>
+                    <li>.
+                     </li>
+                    <li><button type="button" class="btn btn-default" aria-label="Left Align">
+                     <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"> Administration</span>
+                    </button>
+                     </li>
+                    <li>.
+                     </li>
+                     <li><button type="button" class="btn btn-default" aria-label="Left Align">
+                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"> About</span>
+                    </button>
+                    </li>
+                </ul>
+                  <ul class="nav navbar-nav navbar-right">
+                     <li><button type="button" class="btn btn-default" aria-label="Right Align">
+                    <input type="text"/>   
+                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"> Search</span>
+                    </button>
+                    </li>
+
+    </ul>
+ 
+            
+            </div>
+
+
+        </div>
+    </div>
+  
+<br>
+<br>
+<br>
+<br>
+<div class="container"> 
+      
+          <div class="row">    
+          <div class="col-md-5"> 
+          <div class="panel panel-primary">
+            <h2>Device Id: <span class="badge">{{deviceId}}</span></h2>
+            <chart [options]="optionsTemperature" 
+                 (selection)="onChartSelection($event)">  
+            </chart>
+          </div>
+          </div>  
+          <div class="col-md-2"> 
+           <div class="container">
+            <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                   <h2><span class="badge">SCHEDULE</span></h2>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#">Dayly</a></li>
+                <li><a href="#">Weekly</a></li>
+                <li><a href="#">Monthly</a></li>
+                <li role="separator" class="divider"></li>
+            </ul>
+            </div>
+           </div>
+          </div>       
+          <div class="col-md-5"> 
+          <div class="panel panel-primary">
+             <h2>Device Id: <span class="badge">{{deviceId}}</span></h2>
+             <chart [options]="optionsHumudity" 
+                  (selection)="onChartSelection($event)">  
+             </chart>
+          </div>  
+          </div>  
+       </div>
+</div>
+</body>
