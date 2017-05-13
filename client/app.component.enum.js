@@ -1,14 +1,11 @@
+"use strict";
+exports.__esModule = true;
 var enumAppComponentClass = (function () {
     function enumAppComponentClass() {
-        this.temperatureExplanationStringToday = 'Today';
-        this.temperatureExplanationStringPrevious = 'Previous';
-        this.temperatureText = "TEMPARATURE";
         this.deviceId = "-";
-        this.TemperatureToday = "0";
-        this.TemperaturePrevious = "0";
-        this.Humudity = "0";
+        this.deviceType = "-";
     }
     return enumAppComponentClass;
-})();
+}());
 exports.enumAppComponentClass = enumAppComponentClass;
 ;

@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as globalVars from "./service/global";
 import "/socket.io/socket.io.js";
-import { ChartModule }   from 'angular2-highcharts'; 
-import 'highcharts/highcharts-more.js';
-import 'highcharts/modules/solid-gauge.js';
+import { ChartsModule } from 'ng2-charts';
 import { enumAppComponentClass }  from './app.component.enum';
 
 @Component({
@@ -14,120 +12,75 @@ import { enumAppComponentClass }  from './app.component.enum';
 
 export class AppComponent implements OnInit {
 
-deviceId:string;
-explanationStringToday:string ='Today';
-explanationStringPrevious = 'Previous';
-temperatureText = "TEMPERATURE (C)";
-humudityText = "HUMUDITY (H)";
-temperatureToday="0";
-temperaturePrevious="0";
-humudityToday="0";
-humudityPrevious="0";
-Humudity="0";
+  deviceId:string;
+  deviceType:string;
+  temperature:string;
 
-optionsTemperature = {
-            title : { text :   this.temperatureText},
-            chart: { zoomType: 'x'},
-             series: [{
-            name:this.explanationStringToday,
-            data: [0,0,0,0,0],
-            allowPointSelect: true
-            },
-            {
-            name: this.explanationStringPrevious,
-            data: [0,0,0,0,0],
-            allowPointSelect: true
-            }]
-        };
+  public barChartOptions:any = {
+    scaleShowVerticalLines: false,
+    responsive: true
+  };
+  public barChartLabels:string[] = ['TVOC', 'TEMP.', 'HUM.', 'CO2', 'PM25', 'ACCMAX', 'LIGHT','NOISE','PRESS.'];
+  public barChartType:string = 'bar';
+  public barChartLegend:boolean = true;
+  public doughnutChartLabels:string[] = ['TVOC', 'TEMP.', 'HUM.', 'CO2', 'PM25', 'ACCMAX', 'LIGHT','NOISE','PRESS.'];
+  public doughnutChartData:number[] = [0, 0, 0, 0, 0, 0, 0,0,0];
+  public doughnutChartType:string = 'doughnut';
 
-optionsHumudity = {
-            title : { text :   this.humudityText},
-            chart: { zoomType: 'x'},
-             series: [{
-            name:this.explanationStringToday,
-            data: [0,0,0,0,0],
-            allowPointSelect: true
-            },
-            {
-            name: this.explanationStringPrevious,
-            data: [0,0,0,0,0],
-            allowPointSelect: true
-            }]
-        };
+   public ChartColors:any = 
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }
 
-constructor(){
 
-  this.deviceId =  "-";
+
+  public barChartData:any[] = [
+    {data: [0, 0, 0, 0, 0, 0, 0,0,0], label: 'VALUES'}
+  ];
  
- /*TODO aşağıdaki değişkenleri app.component.enum dosyasından okumaya başla
+  constructor(){
 
-  this.temperatureExplanationStringToday = enumAppComponentClass.temperatureExplanationStringToday;
-  this.temperatureExplanationStringPrevious = enumAppComponentClass.temperatureExplanationStringPrevious;
-  this.temperatureText = enumAppComponentClass.temperatureText;  
-  this.TemperatureToday = enumAppComponentClass.TemperatureToday;
-  this.TemperaturePrevious = enumAppComponentClass.TemperaturePrevious;
-  */
-}
-
-onChartSelection (e) {
-    this.from = e.originalEvent.xAxis[0].min.toFixed(2);
-    this.to = e.originalEvent.xAxis[0].max.toFixed(2);
-}
-
-manipulate(message)
-{
-         this.deviceId    = message.deviceId;      
-
-        //TODO aşağıdaki değerleri stream den array olarak alıp dizi içinde manipule et
-        // this.optionsTemperature.series.push(promiseToday,promisePrevious);
-
-         var promiseToday = {
-                        name: this.explanationStringToday,
-                        data:message.temperatureToday,
-                        allowPointSelect: true
-         };
-
-          var promisePrevious = {
-                        name: this.explanationStringPrevious,
-                        data:message.temperaturePrevious,
-                        allowPointSelect: true
-         };
-
-
-          this.optionsTemperature = {
-                        title : { text : this.temperatureText },
-                        chart: { zoomType: 'x'},
-                        series: [promiseToday,promisePrevious]
-                    };
-    
-
-            var promiseTodayHumudity = {
-                        name: this.explanationStringToday,
-                        data:message.humudityToday,
-                        allowPointSelect: true
-           };
-
-           var promisePreviousHumudity = {
-                        name: this.explanationStringPrevious,
-                        data:message.humudityPrevious,
-                        allowPointSelect: true
-           };
-
-            this.optionsHumudity = {
-                        title : { text : this.humudityText },
-                        chart: { zoomType: 'x'},
-                        series: [promiseTodayHumudity,promisePreviousHumudity]
-            };
-
-             this.onChartSelection(this.optionsTemperature);
-             this.onChartSelection(this.optionsHumudity);
-
+  this.deviceId =  "Device Id";
+  this.deviceType =  "Device Type";
+  this.temperature = "...";
 
 }
+
+  // events
+  public chartClicked(e:any):void {
+    console.log(e);
+  }
+ 
+  public chartHovered(e:any):void {
+    console.log(e);
+  }
+
+
+   public doughnutchartManipulate(message:any):void {
+   
+
+    this.doughnutChartData = message;
+ 
+  }
+
+
+  public barchartManipulate(message:any[]):void {
+
+    let clone = JSON.parse(JSON.stringify(this.barChartData));
+    clone[0].data = message;
+    this.barChartData = clone;
+ 
+  }
+
 
 incomeMessageFormatControl(message)
 {
-    if(!message || !message.temperatureToday ||  !message.temperaturePrevious || !message.humudityPrevious || !message.humudityToday || !message.deviceId ){
+    if(!message || !message.deviceType ||  !message.data  || !message.deviceId ){
       console.log("message format is invalid!");
       return false;
     }
@@ -140,8 +93,15 @@ incomeMessageFormatControl(message)
     globalVars.socket.on("sendMessage", (message) => {  
          console.log("received message:", message);
            
-    if(this.incomeMessageFormatControl(message))    
-          this.manipulate(message);
+   if(this.incomeMessageFormatControl(message))  
+   {  
+         this.deviceId    = message.deviceId;   
+         this.deviceType   = message.deviceType;  
+         var dataArr = message.data.split(',').map(Number);
+         this.temperature  =  dataArr[1];
+         this.barchartManipulate(dataArr);
+         this.doughnutchartManipulate(dataArr);
+   }
       
     });
   }
