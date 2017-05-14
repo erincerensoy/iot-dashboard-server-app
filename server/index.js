@@ -121,7 +121,7 @@ var postheaders = {
 };
 
 var optionspost = {
-    host : '52.33.132.222',
+    host : 'localhost',
     port :  4000,            
     path : '/messages',
     method : 'POST',
