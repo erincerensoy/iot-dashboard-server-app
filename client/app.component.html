@@ -1,6 +1,6 @@
 <script src="node_modules/chart.js/src/chart.js"></script>
 <body  background="wood">
-    <div class="navbar navbar-inverse navbar-fixed-top  wood color">
+    <div class="navbar navbar-inverse navbar-fixed-top   color">
         <div class="container color" >
             <div class="navbar-header color">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -52,19 +52,22 @@
     </div>
 
 
-  
 
 <div class="jumbotron wood"> 
           <br>
           <div class="row">  
            <div class="col-md-1">
+            <nav class="mainNav">
+              <ul>
+                  <li><a href="#" data-title="Devices"><span style="text-align: center"> Devices </span></a></li>
+                  <li><a href="#" data-title="Trace"><span style="text-align: center"> Trace </span></a></li>
+                  <li><a href="#" data-title="Analysis"><span style="text-align: center"> Analysis </span></a></li>
+              </ul>
+            </nav>
            </div>   
-          <div class="col-md-2"> 
 
-          <div class="container">
-          <br>
-          <br>
-              <div class="de">
+            <div class="col-md-2">
+             <div class="de">
                   <div class="den">
                     <div class="dene">
                       <div class="denem">
@@ -75,24 +78,29 @@
                     </div>
                   </div>
               </div>
-          </div>
-          </div>
+           </div>  
           
           <div class="col-md-4"> 
           <div class="panel panel-primary"> 
              <div style="display: block">
              <canvas baseChart
-            [datasets]="barChartData"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [colors]= "ChartColors"
-            [legend]="barChartLegend"
-            [chartType]="barChartType"
-            (chartHover)="chartHovered($event)"
-            (chartClick)="chartClicked($event)"></canvas>
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [colors]= "ChartColors"
+              [legend]="barChartLegend"
+              [chartType]="barChartType"
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)">           
+            </canvas>
             </div>
-
           </div>
+
+
+
+
+          
+
           </div>  
           <div class="col-md-4"> 
           <div class="panel panel-primary">
@@ -105,7 +113,7 @@
               (chartClick)="chartClicked($event)">
                 
               </canvas>
-</div>
+           </div>
             
           </div>  
           </div>  
