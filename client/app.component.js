@@ -30,10 +30,9 @@ var AppComponent = (function () {
             pointHoverBorderColor: 'rgba(148,159,177,0.8)'
         };
         this.barChartData = [
-            { data: [0, 0, 0, 0, 0, 0, 0, 0, 0], label: 'VALUES' }
+            { data: [0, 0, 0, 0, 0, 0, 0, 0, 0], label: 'UNITS' }
         ];
-        this.deviceId = "Device Id";
-        this.deviceType = "Device Type";
+        this.deviceId = "";
         this.temperature = "...";
     }
     // events
@@ -52,7 +51,7 @@ var AppComponent = (function () {
         this.barChartData = clone;
     };
     AppComponent.prototype.incomeMessageFormatControl = function (message) {
-        if (!message || !message.deviceType || !message.data || !message.deviceId) {
+        if (!message || !message.data || !message.deviceId) {
             console.log("message format is invalid!");
             return false;
         }
@@ -66,11 +65,11 @@ var AppComponent = (function () {
             console.log("received message:", message);
             if (_this.incomeMessageFormatControl(message)) {
                 _this.deviceId = message.deviceId;
-                _this.deviceType = message.deviceType;
-                var dataArr = message.data.split(',').map(Number);
-                _this.temperature = dataArr[1];
-                _this.barchartManipulate(dataArr);
-                _this.doughnutchartManipulate(dataArr);
+                var data = message.data;
+                var tempData = [data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]];
+                _this.temperature = data[0];
+                _this.barchartManipulate(tempData);
+                _this.doughnutchartManipulate(tempData);
             }
         });
     };

@@ -4,6 +4,7 @@ import "/socket.io/socket.io.js";
 import { ChartsModule } from 'ng2-charts';
 import { enumAppComponentClass }  from './app.component.enum';
 
+
 @Component({
   selector: 'iot-app',
   templateUrl:'client/app.component.html',
@@ -12,8 +13,9 @@ import { enumAppComponentClass }  from './app.component.enum';
 
 export class AppComponent implements OnInit {
 
+
+ 
   deviceId:string;
-  deviceType:string;
   temperature:string;
 
   public barChartOptions:any = {
@@ -25,6 +27,7 @@ export class AppComponent implements OnInit {
   public barChartLegend:boolean = true;
   public doughnutChartLabels:string[] = ['TVOC', 'TEMP.', 'HUM.', 'CO2', 'PM25', 'ACCMAX', 'LIGHT','NOISE','PRESS.'];
   public doughnutChartData:number[] = [0, 0, 0, 0, 0, 0, 0,0,0];
+
   public doughnutChartType:string = 'doughnut';
 
    public ChartColors:any = 
@@ -40,13 +43,12 @@ export class AppComponent implements OnInit {
 
 
   public barChartData:any[] = [
-    {data: [0, 0, 0, 0, 0, 0, 0,0,0], label: 'VALUES'}
+    {data: [0, 0, 0, 0, 0, 0, 0,0,0], label: 'UNITS'}
   ];
  
   constructor(){
 
-  this.deviceId =  "Device Id";
-  this.deviceType =  "Device Type";
+  this.deviceId =  "";
   this.temperature = "...";
 
 }
@@ -61,9 +63,8 @@ export class AppComponent implements OnInit {
   }
 
 
-   public doughnutchartManipulate(message:any):void {
+  public doughnutchartManipulate(message:any):void {
    
-
     this.doughnutChartData = message;
  
   }
@@ -80,12 +81,13 @@ export class AppComponent implements OnInit {
 
 incomeMessageFormatControl(message)
 {
-    if(!message || !message.deviceType ||  !message.data  || !message.deviceId ){
+    if(!message || !message.data  || !message.deviceId ){
       console.log("message format is invalid!");
       return false;
     }
     else return true;
 }
+
 
  ngOnInit() { 
     globalVars.socket =  io({ message:"BEGIN_CONNECTION" });
@@ -96,11 +98,13 @@ incomeMessageFormatControl(message)
    if(this.incomeMessageFormatControl(message))  
    {  
          this.deviceId    = message.deviceId;   
-         this.deviceType   = message.deviceType;  
-         var dataArr = message.data.split(',').map(Number);
-         this.temperature  =  dataArr[1];
-         this.barchartManipulate(dataArr);
-         this.doughnutchartManipulate(dataArr);
+         var data =    message.data;
+         
+         var tempData:number[] = [data[0], data[1], data[2], data[3], data[4], data[5],data[6],data[7],data[8]];
+
+         this.temperature  = data[0];
+         this.barchartManipulate(tempData);
+         this.doughnutchartManipulate(tempData);
    }
       
     });

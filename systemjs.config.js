@@ -16,7 +16,7 @@
     'highcharts/highstock.src':   'node_modules/highcharts/highstock.js',
     'highcharts/highcharts-more.js':'node_modules/highcharts/highcharts-more.js',
     'highcharts/js/modules/solid-gauge.js' : 'node_modules/highcharts/js/modules/solid-gauge.js', 
-    'ng2-charts':                 'node_modules/ng2-charts',
+    'ng2-charts':                 'node_modules/ng2-charts',     
     'chart.js':                   'node_modules/chart.js/src',
     'chartjs-color':              'node_modules/chartjs-color',
     'color-convert':              'node_modules/color-convert',

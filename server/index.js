@@ -11,12 +11,12 @@ let bodyParser = require('body-parser');
 let MongoClient = require('mongodb').MongoClient;
 var https = require('http');
 var kafka = require('kafka-node');
-var avro = require('avsc');
- var parse = require('fast-json-parse')
-//const kafkaSse = require('kafka-sse');
-//var crypto = require('crypto');
-//var algorithm = 'aes-256-ctr';
-//var password = 'd6F3Efeq';
+var parse = require('fast-json-parse')
+var crypto = require('crypto');
+var algorithm = 'aes-256-ctr';
+var password = 'd6F3Efeq';
+var jsonS = require('json');
+
 
 
 let iot_db;
@@ -103,15 +103,23 @@ var consumer = new Consumer(
 
 consumer.on('message', function (message) {
 
-  var s = JSON.stringify(message.value);
-  var arr = s.split('-');
+var s;
+try
+{
+ s = JSON.parse(message.value);
+ console.log(s.data.TVOC);
+}
+catch(e)
+{
+ return console.log(e);
+} 
 
-  var jsonObject = JSON.stringify(
+
+var jsonObject = JSON.stringify(
 	{
 	    	
-	"deviceId":arr[0],
-	"deviceType":arr[1],
-	"data":arr[2]
+	"deviceId":s.deviceId,
+	"data":[Number(s.data.TVOC),Number(s.data.TEMP),Number(s.data.HUMIDITY),Number(s.data.CO2),Number(s.data.PM25),Number(s.data.ACCMAXTILT),Number(s.data.LIGHT),Number(s.data.NOISE),Number(s.data.PRESSURE)]
 	}
 );
 
@@ -138,6 +146,8 @@ var reqPost = https.request(optionspost, function(res) {
 
 reqPost.write(jsonObject);
 reqPost.end();
+
+
 
 
 });
